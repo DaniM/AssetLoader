@@ -83,6 +83,7 @@ package org.assetloader.loaders
 		override public function destroy() : void
 		{
 			super.destroy();
+			_loader.unloadAndStop(true);
 			_loader = null;
 			_displayObject = null;
 		}
@@ -92,6 +93,8 @@ package org.assetloader.loaders
 		 */
 		override protected function complete_handler(event : Event) : void
 		{
+			trace ("DisplayObjectLoader complete handler" );
+			
 			_data = _displayObject = _loader.content;
 
 			var testResult : String = testData(_data);

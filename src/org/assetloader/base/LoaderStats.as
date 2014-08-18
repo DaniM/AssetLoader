@@ -108,6 +108,7 @@ package org.assetloader.base
 		 */
 		public function update(bytesLoaded : uint, bytesTotal : uint) : void
 		{
+			trace( "Loader Stats update" );
 			_bytesTotal = bytesTotal;
 
 			if(bytesLoaded > 0)

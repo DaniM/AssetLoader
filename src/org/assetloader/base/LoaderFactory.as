@@ -31,6 +31,11 @@ package org.assetloader.base
 		 */
 		protected var _loader : AbstractLoader;
 
+		public function get LastProducedLoader() : AbstractLoader
+		{
+			return _loader;
+		}
+		
 		public function LoaderFactory()
 		{
 		}
@@ -45,7 +50,9 @@ package org.assetloader.base
 		 * 
 		 * @return Resulting ILoader.
 		 * 
-		 * @see org.assetloader.base.AssetType		 * @see org.assetloader.base.Param		 * @see org.assetloader.core.ILoader
+		 * @see org.assetloader.base.AssetType
+		 * @see org.assetloader.base.Param
+		 * @see org.assetloader.core.ILoader
 		 */
 		public function produce(id : String, type : String = "AUTO", request : URLRequest = null, params : Array = null) : ILoader
 		{

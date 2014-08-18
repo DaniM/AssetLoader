@@ -167,6 +167,7 @@ package org.assetloader.loaders
 		/**
 		 * @private
 		 */
+		
 		protected function progressTimer_handler(event : TimerEvent) : void
 		{
 			if(_netStream.bytesLoaded > 4 && !_isReady)
@@ -176,8 +177,10 @@ package org.assetloader.loaders
 				_isReady = true;
 				_onReady.dispatch(this, _netStream);
 			}
-			else if(_netStream.bytesLoaded != _stats.bytesTotal && _isReady)
-				progress_handler(new ProgressEvent(ProgressEvent.PROGRESS, false, false, _netStream.bytesLoaded, _netStream.bytesTotal));
+			else if (_netStream.bytesLoaded != _stats.bytesTotal && _isReady)
+			{
+				//progress_handler(new ProgressEvent(ProgressEvent.PROGRESS, false, false, _netStream.bytesLoaded, _netStream.bytesTotal));
+			}
 			else if(_netStream.bytesLoaded > 8 && _netStream.bytesTotal > 8)
 			{
 				_progressTimer.stop();

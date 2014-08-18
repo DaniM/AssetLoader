@@ -24,10 +24,12 @@ package org.assetloader.base
 		 * @private
 		 */
 		protected var _loaders : Dictionary;
+		
 		/**
 		 * @private
 		 */
 		protected var _assets : Dictionary;
+		
 		/**
 		 * @private
 		 */
@@ -37,6 +39,7 @@ package org.assetloader.base
 		 * @private
 		 */
 		protected var _loaderFactory : LoaderFactory;
+		
 		/**
 		 * @private
 		 */
@@ -46,6 +49,7 @@ package org.assetloader.base
 		 * @private
 		 */
 		protected var _numLoaders : int;
+		
 		/**
 		 * @private
 		 */
@@ -55,6 +59,7 @@ package org.assetloader.base
 		 * @private
 		 */
 		protected var _loadedIds : Array;
+		
 		/**
 		 * @private
 		 */
@@ -92,6 +97,7 @@ package org.assetloader.base
 		override protected function initSignals() : void
 		{
 			super.initSignals();
+			trace ( "AssetLoaderBase: initSignals" );
 			_onConfigLoaded = new LoaderSignal();
 		}
 
@@ -175,6 +181,11 @@ package org.assetloader.base
 				removeListeners(loader);
 
 				_numLoaders = _ids.length;
+				
+				if ( loader == _loaderFactory.LastProducedLoader )
+				{
+					_loaderFactory = new LoaderFactory();
+				}
 			}
 
 			updateTotalBytes();
@@ -209,6 +220,7 @@ package org.assetloader.base
 		 */
 		protected function updateTotalBytes() : void
 		{
+			trace( "AssetLoaderBase updateTotalBytes" );
 			var bytesTotal : uint = 0;
 
 			for each(var loader : ILoader in _loaders)
@@ -241,7 +253,7 @@ package org.assetloader.base
 			{
 				loader.onError.add(error_handler);
 				loader.onOpen.add(open_handler);
-				loader.onProgress.add(progress_handler);
+				//loader.onProgress.add(progress_handler);
 				loader.onComplete.add(complete_handler);
 			}
 		}
@@ -255,7 +267,7 @@ package org.assetloader.base
 			{
 				loader.onError.remove(error_handler);
 				loader.onOpen.remove(open_handler);
-				loader.onProgress.remove(progress_handler);
+				//loader.onProgress.remove(progress_handler);
 				loader.onComplete.remove(complete_handler);
 			}
 		}
@@ -334,6 +346,7 @@ package org.assetloader.base
 		 */
 		protected function progress_handler(signal : LoaderSignal) : void
 		{
+			trace( "On progress handler" );
 			_inProgress = true;
 
 			var bytesLoaded : uint = 0;
@@ -347,7 +360,7 @@ package org.assetloader.base
 
 			_stats.update(bytesLoaded, bytesTotal);
 
-			_onProgress.dispatch(this, _stats.latency, _stats.speed, _stats.averageSpeed, _stats.progress, _stats.bytesLoaded, _stats.bytesTotal);
+			//_onProgress.dispatch(this, _stats.latency, _stats.speed, _stats.averageSpeed, _stats.progress, _stats.bytesLoaded, _stats.bytesTotal);
 		}
 
 		/**
@@ -355,7 +368,9 @@ package org.assetloader.base
 		 */
 		protected function complete_handler(signal : LoaderSignal, data : * = null) : void
 		{
-			_loaded = (_numLoaders == _numLoaded);
+			trace( "AssetLoaderBase complete_handler" );
+			var sum : int = _failOnError ? _numLoaded : _numLoaded + _numFailed;
+			_loaded = ( _numLoaders == sum );
 			_inProgress = false;
 			_stats.done();
 
@@ -386,6 +401,7 @@ package org.assetloader.base
 		 */
 		public function getLoader(id : String) : ILoader
 		{
+			//trace ( "getLoader enter" );
 			if(hasLoader(id))
 				return _loaders[id];
 			return null;
@@ -423,6 +439,9 @@ package org.assetloader.base
 		 */
 		public function hasLoader(id : String) : Boolean
 		{
+			//trace ( "hasLoader" );
+			//var b : Boolean = _loaders.hasOwnProperty(id);
+			//trace ( "hasLoader" + b );
 			return _loaders.hasOwnProperty(id);
 		}
 

@@ -19,7 +19,7 @@ package org.assetloader.loaders
 		/**
 		 * @private
 		 */
-		protected var _onId3 : LoaderSignal;
+		//protected var _onId3 : LoaderSignal;
 
 		/**
 		 * @private
@@ -39,7 +39,7 @@ package org.assetloader.loaders
 		/**
 		 * @private
 		 */
-		protected var _isReady : Boolean;
+		protected var _isReady : Boolean = false;
 
 		public function SoundLoader(request : URLRequest, id : String = null)
 		{
@@ -54,7 +54,7 @@ package org.assetloader.loaders
 			super.initSignals();
 			_onComplete = new LoaderSignal(Sound);
 			_onReady = new LoaderSignal(Sound);
-			_onId3 = new LoaderSignal();
+			//_onId3 = new LoaderSignal();
 		}
 
 		/**
@@ -82,6 +82,7 @@ package org.assetloader.loaders
 		{
 			try
 			{
+				_sound.addEventListener( Event.COMPLETE, soundLoaded );
 				_sound.load(request, getParam(Param.SOUND_LOADER_CONTEXT));
 			}
 			catch(error : SecurityError)
@@ -117,9 +118,10 @@ package org.assetloader.loaders
 		{
 			super.destroy();
 
-			if(_readyTimer)
+			if(_readyTimer && _readyTimer.hasEventListener( TimerEvent.TIMER ))
 				_readyTimer.removeEventListener(TimerEvent.TIMER, readyTimer_handler);
-
+				
+			_soundLoaded = false;	
 			_sound = null;
 			_readyTimer = null;
 			_isReady = false;
@@ -131,8 +133,8 @@ package org.assetloader.loaders
 		override protected function addListeners(dispatcher : IEventDispatcher) : void
 		{
 			super.addListeners(dispatcher);
-			if(dispatcher)
-				dispatcher.addEventListener(Event.ID3, id3_handler);
+			//if(dispatcher)
+			//	dispatcher.addEventListener(Event.ID3, id3_handler);
 		}
 
 		/**
@@ -141,8 +143,8 @@ package org.assetloader.loaders
 		override protected function removeListeners(dispatcher : IEventDispatcher) : void
 		{
 			super.removeListeners(dispatcher);
-			if(dispatcher)
-				dispatcher.removeEventListener(Event.ID3, id3_handler);
+			//if(dispatcher)
+			//	dispatcher.removeEventListener(Event.ID3, id3_handler);
 		}
 
 		/**
@@ -150,11 +152,14 @@ package org.assetloader.loaders
 		 */
 		override protected function complete_handler(event : Event) : void
 		{
+			trace ( "SoundLoader complete handler" );
 			if(!_isReady)
 			{
 				_isReady = true;
 				_onReady.dispatch(this, _sound);
 				_readyTimer.stop();
+				trace( "Removing timer handler" );
+				_readyTimer.removeEventListener(TimerEvent.TIMER, readyTimer_handler);
 			}
 			super.complete_handler(event);
 		}
@@ -164,21 +169,36 @@ package org.assetloader.loaders
 		 */
 		protected function readyTimer_handler(event : TimerEvent) : void
 		{
-			if(!_isReady && !_sound.isBuffering)
+			trace ( "SoundLoader readytimer handler " + this.sound.url );
+			if(!_isReady && _soundLoaded )
 			{
 				_onReady.dispatch(this, _sound);
 				_isReady = true;
 				_readyTimer.stop();
+				trace( "Removing timer handler" );
+				_readyTimer.removeEventListener(TimerEvent.TIMER, readyTimer_handler);
 			}
 		}
 
+		private var _soundLoaded : Boolean = false;
+		
+		protected function soundLoaded(event : Event) : void
+		{
+			trace( "Sound loaded!!" );
+			_sound.removeEventListener( Event.COMPLETE, soundLoaded );
+			
+			_soundLoaded = true;
+		}
+		
 		/**
 		 * @private
 		 */
-		protected function id3_handler(event : Event) : void
+		
+		 //not supported in scaleform
+		/*protected function id3_handler(event : Event) : void
 		{
 			_onId3.dispatch(this);
-		}
+		}*/
 
 		/**
 		 * Dispatches when the Sound instance is ready to be played e.g. streamed while still loading.
@@ -213,11 +233,14 @@ package org.assetloader.loaders
 		 * 
 		 * @see org.assetloader.signals.LoaderSignal
 		 */
+		
+		/*
 		public function get onId3() : LoaderSignal
 		{
 			return _onId3;
 		}
-
+		*/
+		
 		/**
 		 * Gets the Sound instance.
 		 * <p>Note: this instance will be available as soon as the SoundLoader's

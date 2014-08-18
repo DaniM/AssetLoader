@@ -29,10 +29,12 @@ package org.assetloader.base
 		 * @private
 		 */
 		protected var _onOpen : LoaderSignal;
+		
 		/**
 		 * @private
 		 */
-		protected var _onProgress : ProgressSignal;
+		//protected var _onProgress : ProgressSignal;
+		
 		/**
 		 * @private
 		 */
@@ -143,11 +145,13 @@ package org.assetloader.base
 		 */
 		protected function initSignals() : void
 		{
+			//trace ( "initSignals: Abstract loader" );
+			
 			_onError = new ErrorSignal();
 			_onHttpStatus = new HttpStatusSignal();
 
 			_onOpen = new LoaderSignal();
-			_onProgress = new ProgressSignal();
+			//_onProgress = new ProgressSignal();
 			_onComplete = new LoaderSignal();
 
 			_onAddedToParent = new LoaderSignal(IAssetLoader);
@@ -204,6 +208,7 @@ package org.assetloader.base
 		 */
 		protected function addedToParent_handler(signal : LoaderSignal, parent : IAssetLoader) : void
 		{
+			trace( "addedToParent_handler" );
 			if(_parent)
 				throw new AssetLoaderError(AssetLoaderError.ALREADY_CONTAINED_BY_OTHER(_id, _parent.id));
 
@@ -315,6 +320,7 @@ package org.assetloader.base
 		 */
 		public function getParam(id : String) : *
 		{
+			//trace( "getParam" );
 			if(_parent && _params[id] == undefined)
 				return parent.getParam(id);
 			return _params[id];
@@ -407,10 +413,11 @@ package org.assetloader.base
 		/**
 		 * @inheritDoc
 		 */
+		/*
 		public function get onProgress() : ProgressSignal
 		{
 			return _onProgress;
-		}
+		}*/
 
 		/**
 		 * @inheritDoc

@@ -1,5 +1,6 @@
 package org.assetloader.loaders
 {
+	import flash.net.URLLoader;
 	import org.assetloader.base.AssetType;
 	import org.assetloader.signals.LoaderSignal;
 
@@ -8,6 +9,7 @@ package org.assetloader.loaders
 	import flash.net.URLRequest;
 	import flash.net.URLStream;
 	import flash.utils.ByteArray;
+	import flash.net.URLLoaderDataFormat;
 
 	/**
 	 * @author Matan Uberstein
@@ -22,13 +24,18 @@ package org.assetloader.loaders
 		/**
 		 * @private
 		 */
-		protected var _loader : URLStream;
+		protected var _loader : URLLoader;
 
 		public function BinaryLoader(request : URLRequest, id : String = null)
 		{
 			super(request, AssetType.BINARY, id);
 		}
 
+		override public function start() : void
+		{
+			super.start();
+		}
+		
 		/**
 		 * @private
 		 */
@@ -43,7 +50,8 @@ package org.assetloader.loaders
 		 */
 		override protected function constructLoader() : IEventDispatcher
 		{
-			_loader = new URLStream();
+			_loader = new URLLoader();
+			_loader.dataFormat = URLLoaderDataFormat.BINARY;
 			return _loader;
 		}
 
@@ -79,8 +87,13 @@ package org.assetloader.loaders
 		 */
 		override public function destroy() : void
 		{
+			ByteArray(_data).clear();
 			super.destroy();
+			ByteArray(_loader.data).clear();
+			_loader.data = null;
 			_loader = null;
+			_data = null;
+			_bytes.clear();
 			_bytes = null;
 		}
 
@@ -89,10 +102,11 @@ package org.assetloader.loaders
 		 */
 		override protected function complete_handler(event : Event) : void
 		{
-			_bytes = new ByteArray();
-			_loader.readBytes(_bytes);
-
-			_data = _bytes;
+			trace ("BinaryLoader complete handler" );
+			//_bytes = new ByteArray();
+			//_loader.readBytes(_bytes);
+			_bytes = _loader.data;
+			_data = _loader.data; //_bytes;
 
 			super.complete_handler(event);
 		}

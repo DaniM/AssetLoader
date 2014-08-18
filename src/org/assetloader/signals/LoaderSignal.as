@@ -21,12 +21,22 @@ package org.assetloader.signals
 		public function LoaderSignal(...valueClasses)
 		{
 			super();
+			
+			//trace("Loader signal constructor" );
+			
 			_signalType ||= LoaderSignal;
 
+			//trace("Loader signal weird thing" );
+			
 			if(valueClasses.length == 1 && valueClasses[0] is Array)
 				valueClasses = valueClasses[0];
 
-			this.valueClasses = [_signalType].concat.apply(null, valueClasses);
+			//trace("Loader signal 2" );
+		
+			//this.valueClasses = [_signalType].concat.apply(null, valueClasses);
+			this.valueClasses = [_signalType].concat(valueClasses);
+			
+			//trace("Loader signal 3", this.valueClasses );
 		}
 
 		/**
@@ -36,7 +46,12 @@ package org.assetloader.signals
 		{
 			_loader = args.shift();
 			
-			super.dispatch.apply(null, [this].concat.apply(null, args));
+			//trace( "before apply" );
+			
+			//super.dispatch.apply(null, [this].concat.apply(null, args));
+			super.dispatch.apply(null, [this].concat( args ) );
+			
+			//trace( "after apply" );
 		}
 
 		/**

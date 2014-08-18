@@ -232,26 +232,30 @@ package org.assetloader.core
 		 * 
 		 * @see org.assetloader.signals.ProgressSignal
 		 */
-		function get onProgress() : ProgressSignal
+		//function get onProgress() : ProgressSignal
 
 		/**
 		 * Dispatches when the loading operations has completed.
 		 * 
 		 * <p>HANDLER ARGUMENTS: (signal:<strong>LoaderSignal</strong>, data:<strong>RelatedType</strong>)</p>
 		 * <ul>
-		 *	 <li><strong>signal</strong> - The signal that dispatched.</li>		 *	 <li><strong>data</strong> - This will be a strongly typed value of what the ILoader has loaded. See list below.</li>
+		 *	 <li><strong>signal</strong> - The signal that dispatched.</li>
+		 *	 <li><strong>data</strong> - This will be a strongly typed value of what the ILoader has loaded. See list below.</li>
 		 * </ul>
 		 * 
 		 * <p>This is the list of ILoader implemetations and their strongly typed return.</p>
 		 * <table class="innertable" width="100%">
 		 * <tr>
-		 *	 	<th>Implementation:</th>		 * 		<th>Type:</th>		 * </tr>
+		 *	 	<th>Implementation:</th>
+		 * 		<th>Type:</th>
+		 * </tr>
 		 * <tr>
 		 * 		<td>AssetLoader</td>
 		 * 		<td>Dictionary</td>
 		 * 	</tr>
 		 * 	<tr>
-		 * 		<td>BinaryLoader</td>		 * 		<td>ByteArray</td>
+		 * 		<td>BinaryLoader</td>
+		 * 		<td>ByteArray</td>
 		 * 	</tr>
 		 * 	<tr>
 		 * 		<td>CSSLoader</td>

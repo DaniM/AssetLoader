@@ -51,7 +51,7 @@ package org.assetloader.loaders
 			var errMsg : String = "";
 			try
 			{
-				_data = _jsonObject = JSON.decode(data);
+				_data = _jsonObject = com.adobe.serialization.json.JSON.decode(data);
 			}
 			catch(err : Error)
 			{

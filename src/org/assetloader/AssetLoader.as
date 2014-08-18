@@ -33,6 +33,7 @@ package org.assetloader
 		public function AssetLoader(id : String = "PrimaryGroup")
 		{
 			super(id);
+			trace("AssetsLoader");
 		}
 
 		/**
@@ -41,6 +42,7 @@ package org.assetloader
 		override protected function initSignals() : void
 		{
 			super.initSignals();
+			//trace ("Asset Loader: initSignals");
 			_onChildOpen = new LoaderSignal(ILoader);
 			_onChildError = new ErrorSignal(ILoader);
 			_onChildComplete = new LoaderSignal(ILoader);
@@ -205,6 +207,7 @@ package org.assetloader
 		 */
 		override protected function error_handler(signal : ErrorSignal) : void
 		{
+			trace( "Asset loader error_handler" );
 			var loader : ILoader = signal.loader;
 
 			_failedIds.push(loader.id);
@@ -224,6 +227,8 @@ package org.assetloader
 		 */
 		override protected function complete_handler(signal : LoaderSignal, data : * = null) : void
 		{
+			trace ( "AssetLoader complete handler" );
+			
 			var loader : ILoader = signal.loader;
 
 			removeListeners(loader);

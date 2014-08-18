@@ -9,6 +9,9 @@ package org.assetloader.loaders
 	import flash.events.IEventDispatcher;
 	import flash.net.URLRequest;
 
+	import flash.utils.getQualifiedClassName;
+	import flash.utils.getDefinitionByName;
+
 	/**
 	 * @author Matan Uberstein
 	 */
@@ -83,6 +86,7 @@ package org.assetloader.loaders
 		 */
 		override protected function testData(data : DisplayObject) : String
 		{
+			trace( "SWFLoader testData" );
 			var errMsg : String = "";
 			try
 			{
@@ -113,9 +117,17 @@ package org.assetloader.loaders
 		 */
 		public function get swfClass() : Class
 		{
-			var swfClassName:String = getQualifiedClassName(_swf);
-			var swfClass:Class = getDefinitionByName(swfClassName) as Class;
-			return swfClass;
+			trace( "swfClass" );
+			if ( _swf )
+			{
+				var swfClassName:String = getQualifiedClassName(_swf);
+				var swfClass:Class = getDefinitionByName(swfClassName) as Class;
+				return swfClass;
+			}
+			else
+			{
+				return null;
+			}
 		}
 
 		/**

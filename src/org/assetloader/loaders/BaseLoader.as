@@ -20,7 +20,7 @@ package org.assetloader.loaders
 	/**
 	 * @author Matan Uberstein
 	 */
-	public class BaseLoader extends AbstractLoader implements ILoader
+	public class BaseLoader	extends AbstractLoader implements ILoader
 	{
 		/**
 		 * @private
@@ -138,11 +138,13 @@ package org.assetloader.loaders
 		/**
 		 * @private
 		 */
+		
+		/*
 		protected function progress_handler(event : ProgressEvent) : void
 		{
 			_stats.update(event.bytesLoaded, event.bytesTotal);
 			_onProgress.dispatch(this, _stats.latency, _stats.speed, _stats.averageSpeed, _stats.progress, _stats.bytesLoaded, _stats.bytesTotal);
-		}
+		}*/
 
 		/**
 		 * @private
@@ -150,7 +152,7 @@ package org.assetloader.loaders
 		protected function complete_handler(event : Event) : void
 		{
 			_stats.done();
-			_onProgress.dispatch(this, _stats.latency, _stats.speed, _stats.averageSpeed, _stats.progress, _stats.bytesLoaded, _stats.bytesTotal);
+			//_onProgress.dispatch(this, _stats.latency, _stats.speed, _stats.averageSpeed, _stats.progress, _stats.bytesLoaded, _stats.bytesTotal);
 
 			_inProgress = false;
 			_failed = false;
@@ -172,7 +174,7 @@ package org.assetloader.loaders
 				dispatcher.addEventListener(SecurityErrorEvent.SECURITY_ERROR, error_handler);
 
 				dispatcher.addEventListener(Event.OPEN, open_handler);
-				dispatcher.addEventListener(ProgressEvent.PROGRESS, progress_handler);
+				//dispatcher.addEventListener(ProgressEvent.PROGRESS, progress_handler);
 				dispatcher.addEventListener(Event.COMPLETE, complete_handler);
 
 				dispatcher.addEventListener(HTTPStatusEvent.HTTP_STATUS, httpStatus_handler);
@@ -190,7 +192,7 @@ package org.assetloader.loaders
 				dispatcher.removeEventListener(SecurityErrorEvent.SECURITY_ERROR, error_handler);
 
 				dispatcher.removeEventListener(Event.OPEN, open_handler);
-				dispatcher.removeEventListener(ProgressEvent.PROGRESS, progress_handler);
+				//dispatcher.removeEventListener(ProgressEvent.PROGRESS, progress_handler);
 				dispatcher.removeEventListener(Event.COMPLETE, complete_handler);
 
 				dispatcher.removeEventListener(HTTPStatusEvent.HTTP_STATUS, httpStatus_handler);
